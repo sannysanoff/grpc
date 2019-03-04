@@ -160,7 +160,7 @@ static void destroy_pollset(void* p, grpc_error* e) {
 
 static int is_metadata_server_reachable() {
   metadata_server_detector detector;
-  grpc_httpcli_request request;
+  grpc_httpcli_request request = {};
   grpc_httpcli_context context;
   grpc_closure destroy_closure;
   /* The http call is local. If it takes more than one sec, it is for sure not
@@ -172,8 +172,9 @@ static int is_metadata_server_reachable() {
   detector.pollent = grpc_polling_entity_create_from_pollset(pollset);
   detector.is_done = 0;
   detector.success = 0;
-  memset(&detector.response, 0, sizeof(detector.response));
-  memset(&request, 0, sizeof(grpc_httpcli_request));
+  // memset(&detector.response, 0, sizeof(detector.response));
+  //memset(&request, 0, sizeof(grpc_httpcli_request));
+  detector.response = {};
   request.host = (char*)GRPC_COMPUTE_ENGINE_DETECTION_HOST;
   request.http.path = (char*)"/";
   grpc_httpcli_context_init(&context);
